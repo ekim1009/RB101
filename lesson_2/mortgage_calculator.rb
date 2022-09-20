@@ -11,39 +11,41 @@ def valid_number?(num)
 end
 
 # calculate the monthly payments
-  # monthly interest rate = apr / 100
+# monthly interest rate = apr / 100
 def monthly_interest_rate(num)
   (num / 100) / 12
 end
 
-  # loan duration in months = duration * 12
+# loan duration in months = duration * 12
 def duration_months(num)
   num * 12
 end
 
-  # loan amount * (monthly interest rate / (1 - (1 / ((1 + monthly interest rate) * duration in months))))
+# loan amount * (monthly interest rate / (1 - (1 / ((1 + monthly interest rate) * duration in months))))
 def monthly_payment(total, rate, months)
-  total * (rate / (1 - (1 + rate)**(-months)))
+  total * (rate /
+  (1 - (1 + rate)**(-months)))
 end
 
+
+prompt(MESSAGES['welcome'])
+
+user = ''
 loop do
-  prompt(MESSAGES['welcome'])
+  # as for user name
+  prompt(MESSAGES['name'])
+  user = gets.chomp
 
-  user = ''
-  loop do
-    # as for user name
-    prompt(MESSAGES['name'])
-    user = gets.chomp
-
-    if user.empty?
-      prompt(MESSAGES['valid_name'])
-    else 
-      break
-    end 
+  if user.empty?
+    prompt(MESSAGES['valid_name'])
+  else
+    break
   end
+end
 
   prompt("Hello #{user}")
 
+  loop do
   total_loan = ''
   loop do
     # ask for loan amount
@@ -72,14 +74,13 @@ loop do
     end
   end
 
-  
   time = ''
   loop do
-    # ask for loan duration 
+    # ask for loan duration
     prompt(MESSAGES['duration'])
     # save answer as integer
     time = gets.chomp
-    
+
     if time.empty? || time.to_i < 0
       prompt(MESSAGES['valid_number'])
     else
@@ -88,16 +89,16 @@ loop do
   end
 
   duration = duration_months(time.to_i)
-  
-  monthly_interest_rate = monthly_interest_rate(apr.to_f)
-  
-  monthly_payments = monthly_payment(total_loan.to_i, monthly_interest_rate, duration)
 
-  prompt("Your monthly payments are #{monthly_payments.round(2)}")
+  monthly_interest_rate = monthly_interest_rate(apr.to_f)
+
+  payments = monthly_payment(total_loan.to_i, monthly_interest_rate, duration)
+
+  prompt("Your monthly payments are #{payments.round(2)}")
 
   prompt(MESSAGES['again'])
   answer = gets.chomp.downcase
   break unless answer.start_with?('y')
 end
 
-prompt(MESSAGES['googbye'])
+prompt(MESSAGES['goodbye'])
