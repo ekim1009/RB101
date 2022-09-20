@@ -1,5 +1,5 @@
-# require 'yaml'
-# MESSAGES = YAML.load_file('calculator_messages.yml')
+require 'yaml'
+MESSAGES = YAML.load_file('calculator_messages.yml')
 
 def prompt(message)
   puts("==> #{message}")
@@ -30,7 +30,7 @@ def operation_to_message(op)
          end
 end
 
-prompt("Welcome to Calculator! Enter your name:")
+prompt(MESSAGES['welcome'])
 
 name = ''
 loop do
@@ -48,23 +48,23 @@ prompt("Hi #{name}")
 loop do
   number1 = ''
   loop do
-    prompt("Choose a number")
+    prompt(MESSAGES['number1'])
     number1 = gets.chomp
 
     if valid_number?(number1)
       break
-    else prompt("Hmm..that doesn't look like a valid number")
+    else prompt(MESSAGES['not_valid'])
     end
   end
 
   number2 = ''
   loop do
-    prompt("choose another number")
+    prompt(MESSAGES['number2'])
     number2 = gets.chomp
 
     if valid_number?(number2)
       break
-    else prompt("Hmm..that doesn't look like a valid number")
+    else prompt(MESSAGES['not_valid'])
     end
   end
 
@@ -85,7 +85,7 @@ loop do
     if %w(1 2 3 4).include?(operation)
       break
     else
-      prompt("Must choose 1, 2, 3, or 4")
+      prompt(MESSAGES['choose'])
     end
   end
 
@@ -104,9 +104,9 @@ loop do
 
   prompt("The result is #{answer}")
 
-  prompt("Do you want to perform another calculation? (Y to calculate again)")
+  prompt(MESSAGES['again'])
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
 end
 
-prompt("Thank you for using the Calculator.  Good bye!")
+prompt(MESSAGES['goodbye'])
