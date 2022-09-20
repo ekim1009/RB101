@@ -21,12 +21,12 @@ def duration_months(num)
   num * 12
 end
 
-# loan amount * (monthly interest rate / (1 - (1 / ((1 + monthly interest rate) * duration in months))))
+# loan amount * (monthly interest rate /
+# (1 - (1 / ((1 + monthly interest rate) * duration in months))))
 def monthly_payment(total, rate, months)
   total * (rate /
   (1 - (1 + rate)**(-months)))
 end
-
 
 prompt(MESSAGES['welcome'])
 
@@ -43,9 +43,9 @@ loop do
   end
 end
 
-  prompt("Hello #{user}")
+prompt("Hello #{user}")
 
-  loop do
+loop do
   total_loan = ''
   loop do
     # ask for loan amount
