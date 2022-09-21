@@ -43,7 +43,7 @@ loop do
   end
 end
 
-prompt("Hello #{user}")
+prompt("Hello, #{user}!")
 
 loop do
   total_loan = ''
