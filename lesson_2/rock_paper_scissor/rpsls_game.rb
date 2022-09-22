@@ -1,5 +1,6 @@
 require 'yaml'
 MESSAGES = YAML.load_file('rpsls_game_messages.yml')
+
 VALID_OPTIONS = %w(r p sc l sp)
 WINNING_COMBO = {
   r: ['sc', 'l'],
@@ -28,20 +29,19 @@ def operation_to_message(choice)
          end
 end
 
-prompt("Welcome to a variation of Rock Paper Scissor")
-prompt("Rock Paper Scissor Lizard Spock")
-prompt("First player to reach 3 points wins")
-puts("________________")
+prompt(MESSAGES['welcome'])
+prompt(MESSAGES['name_of_game'])
+prompt(MESSAGES['rules'])
 puts("\n")
 
 # ask user for name
 name = ''
 loop do
-  prompt("What is your name?")
+  prompt(MESSAGES['name'])
   name = gets.chomp.strip.capitalize
   # make sure name is valid, if valid..
     if name.empty?
-      prompt("You must enter a valid name")
+      prompt(MESSAGES['valid_name'])
     else
       break
     end
@@ -57,7 +57,7 @@ loop do
   computer_score = 0
   current_computer_score = 0
   current_player_score = 0
-
+  
   loop do
     loop do
       # ask user to pick their choice of -rock -paper -scissor - lizard - spock
@@ -79,10 +79,11 @@ loop do
         VALID_OPTIONS.include?(user_choice)
         break
       else
-        prompt("Please make a valid selection")
+        prompt(MESSAGES['valid_selection'])
       end
     end
 
+    system('clear')
     # have the computer make a random selection
     computer_choice = VALID_OPTIONS.sample
     prompt("You chose #{operation_to_message(user_choice)} and computer chose #{operation_to_message(computer_choice)}")
@@ -91,14 +92,14 @@ loop do
       # winner gets a point per round
       if
         user_choice == computer_choice
-        prompt("It's a tie!")
+        prompt(MESSAGES['tie'])
       elsif
         WINNING_COMBO.has_key?(user_choice.to_sym) && WINNING_COMBO[user_choice.to_sym].include?(computer_choice)
-        prompt("You win this round!")
+        prompt(MESSAGES['win_round'])
         current_player_score = (player_score += 1)
       else
         WINNING_COMBO.has_key?(computer_choice.to_sym) && WINNING_COMBO[computer_choice.to_sym].include?(user_choice)
-        prompt("You lose this round!")
+        prompt(MESSAGES['lose_round'])
         current_computer_score = (computer_score += 1)
       end
 
@@ -109,18 +110,20 @@ loop do
       break if current_player_score == 3 || current_computer_score == 3
   end
   # winner is announced
+  system('clear')
   if player_score > computer_score
-    prompt("Congratulations!  You have won the game!")
+    prompt(MESSAGES['win'])
   else
-    prompt("You lost the game.  Better luck next time!")
+    prompt(MESSAGES['lost'])
   end
 
   # would user like to play again?
-  prompt("Would you like to play again? (Y to play again)")
+  prompt(MESSAGES['play_again'])
   play_again = gets.chomp.strip.downcase
 
   break unless play_again == 'y'
+  system('clear')
 end
 
 # say goodbye
-prompt("Thank you for playing!")
+prompt(MESSAGES['goodbye'])
