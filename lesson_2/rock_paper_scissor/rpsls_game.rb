@@ -15,18 +15,18 @@ def prompt(message)
 end
 
 def operation_to_message(choice)
-  word = case choice
-         when 'r'
-           'rock'
-         when 'p'
-           'paper'
-         when 'sc'
-           'scissor'
-         when 'l'
-           'lizard'
-         when 'sp'
-           'spock'
-         end
+  case choice
+  when 'r'
+    'rock'
+  when 'p'
+    'paper'
+  when 'sc'
+    'scissor'
+  when 'l'
+    'lizard'
+  when 'sp'
+    'spock'
+  end
 end
 
 prompt(MESSAGES['welcome'])
@@ -40,11 +40,11 @@ loop do
   prompt(MESSAGES['name'])
   name = gets.chomp.strip.capitalize
   # make sure name is valid, if valid..
-    if name.empty?
-      prompt(MESSAGES['valid_name'])
-    else
-      break
-    end
+  if name.empty?
+    prompt(MESSAGES['valid_name'])
+  else
+    break
+  end
 end
 
 # welcome user
@@ -57,7 +57,7 @@ loop do
   computer_score = 0
   current_computer_score = 0
   current_player_score = 0
-  
+
   loop do
     loop do
       # ask user to pick their choice of -rock -paper -scissor - lizard - spock
@@ -71,12 +71,11 @@ loop do
         sp) spock
         MSG
 
-        prompt(choice_prompt)
-        user_choice = gets.chomp.strip
+      prompt(choice_prompt)
+      user_choice = gets.chomp.strip
 
       # make sure their input is a valid option
-      if 
-        VALID_OPTIONS.include?(user_choice)
+      if VALID_OPTIONS.include?(user_choice)
         break
       else
         prompt(MESSAGES['valid_selection'])
@@ -86,28 +85,32 @@ loop do
     system('clear')
     # have the computer make a random selection
     computer_choice = VALID_OPTIONS.sample
-    prompt("You chose #{operation_to_message(user_choice)} and computer chose #{operation_to_message(computer_choice)}")
-
-      # make a program to see which is the winner
-      # winner gets a point per round
-      if
-        user_choice == computer_choice
-        prompt(MESSAGES['tie'])
-      elsif
-        WINNING_COMBO.has_key?(user_choice.to_sym) && WINNING_COMBO[user_choice.to_sym].include?(computer_choice)
-        prompt(MESSAGES['win_round'])
-        current_player_score = (player_score += 1)
-      else
-        WINNING_COMBO.has_key?(computer_choice.to_sym) && WINNING_COMBO[computer_choice.to_sym].include?(user_choice)
-        prompt(MESSAGES['lose_round'])
-        current_computer_score = (computer_score += 1)
-      end
-
-      prompt("Your score is #{current_player_score} and the computer score is #{current_computer_score}")
+    prompt("You chose: #{operation_to_message(user_choice)}")
+    prompt("Computer chose: #{operation_to_message(computer_choice)}")
+    puts("\n")
+    # make a program to see which is the winner
+    # winner gets a point per round
+    if user_choice == computer_choice
+      prompt(MESSAGES['tie'])
       puts("\n")
+    elsif WINNING_COMBO.key?(user_choice.to_sym) &&
+          WINNING_COMBO[user_choice.to_sym].include?(computer_choice)
+      prompt(MESSAGES['win_round'])
+      puts("\n")
+      current_player_score = (player_score += 1)
+    elsif WINNING_COMBO.key?(computer_choice.to_sym) &&
+          WINNING_COMBO[computer_choice.to_sym].include?(user_choice)
+      prompt(MESSAGES['lose_round'])
+      puts("\n")
+      current_computer_score = (computer_score += 1)
+    end
 
-      # once user or computer get 3 point, game is over
-      break if current_player_score == 3 || current_computer_score == 3
+    prompt("Your score is: #{current_player_score}")
+    prompt("Computer score is: #{current_computer_score}")
+    puts("\n")
+
+    # once user or computer get 3 point, game is over
+    break if current_player_score == 3 || current_computer_score == 3
   end
   # winner is announced
   system('clear')
