@@ -28,13 +28,12 @@ def monthly_payment(total, rate, months)
   (1 - (1 + rate)**(-months)))
 end
 
-prompt(MESSAGES['welcome'])
-
 user = ''
+user_name = ''
 loop do
   # as for user name
   prompt(MESSAGES['name'])
-  user = gets.chomp.capitalize!
+  user = gets.chomp.strip.capitalize
 
   if user.empty?
     prompt(MESSAGES['valid_name'])
@@ -42,6 +41,10 @@ loop do
     break
   end
 end
+
+puts ("__________________________________________")
+puts ("\n")
+
 
 prompt("Hello, #{user}!")
 

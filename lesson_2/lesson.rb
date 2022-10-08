@@ -1,89 +1,46 @@
-VALID_CHOICES = ['rock', 'paper', 'scissor', 'lizard', 'spock']
 
-def prompt(message)
-  puts("=> #{message}")
-end
 
-def win?(first, second)
-  (first == 'rock' && second == 'scissors') ||
-  (first == 'rock' && second == 'lizard') || 
-  (first == 'paper' && second == 'rock') ||
-  (first == 'paper' && second == 'spock') ||
-  (first == 'scissors' && second == 'paper') ||
-  (first = 'scissors' && second == 'lizard') ||
-  (first == 'lizard' && second == 'spock') ||
-  (first == 'lizard' && second == 'paper') ||
-  (first == 'spock' && second == 'rock') ||
-  (first == 'spock' && second == 'scissors')
-    
-end
+order_data = [
+  {customer_id: 12, customer_name: 'Emma Lopez', order_id: 351, order_date: '12/04/16', order_fulfilled: true, order_value: 135.99},
+  {customer_id: 12, customer_name: 'Emma Lopez', order_id: 383, order_date: '12/04/16', order_fulfilled: true, order_value: 289.49},
+  {customer_id: 12, customer_name: 'Emma Lopez', order_id: 392, order_date: '01/10/17', order_fulfilled: false, order_value: 58.00},
+  {customer_id: 32, customer_name: 'Michael Richards', order_id: 241, order_date: '11/10/16', order_fulfilled: true, order_value: 120.00},
+  {customer_id: 32, customer_name: 'Michael Richards', order_id: 395, order_date: '01/10/17', order_fulfilled: false, order_value: 85.65},
+  # rest of data...
+]
 
-def display_result(player, computer)
-  if win?(player, computer)
-    prompt("You won!")
-  elsif win?(computer, player)
-    prompt("Computer won!")
-  else
-    prompt("It's a tie!")
-  end
-end
 
-def results(player, computer)
-  player_score = 0
-  computer_score = 0
-  if win?(player, computer)
-    player_score += 1
-    if player_score == 5
-      puts("You won!")
-    end
-  elsif win?(computer, player)
-    computer_score += 1
-    if computer_score == 5
-      puts{"Computer won!"}
-    end
-  else
-    puts("It's a tie!")
-  end
-end
 
-# def score(player, computer)
-#   player_score = 0
-#   computer_score = 0
-#   if win?(player, computer)
-#     player_score += 1
-#   else win?(computer, player)
-#     computer_score += 1
-#   end
-# end
+customer_orders = [
+  {
+    customer_id: 12,
+    customer_name: 'Emma Lopez',
+    orders: [
+      { order_fulfilled: true, order_value: 135.99 },
+      { order_fulfilled: true, order_value: 289.49 },
+      { order_fulfilled: false, order_value: 58.00 }
+    ]
+  },
+  {
+    customer_id: 32,
+    customer_name: 'Michael Richards',
+    orders: [
+      { order_fulfilled: true, order_value: 120.00 },
+      { order_fulfilled: false, order_value: 85.65 }
+    ]
+  },
+  # rest of data...
+]
 
-loop do
-  choice = ''
-  round = 0
-  player_score = 0
-  computer_score = 0
 
-  loop do
-    prompt("Choose one: #{VALID_CHOICES.join(', ')}")
-    choice = gets.chomp
+all_orders =[
+  {customer_id: 12, customer_name: 'Emma Lopez', total_order_value: 483.48},
+  {customer_id: 32, customer_name: 'Michael Richards', total_order_value: 205.65},
+  # rest of data
+]
 
-    if VALID_CHOICES.include?(choice)
-      break
-    else
-      prompt("That's not a valid choice")
-    end
-  end
-
-  computer_choice = VALID_CHOICES.sample
-
-  puts("You chose: #{choice}; Computer chose: #{computer_choice}")
-  
-  display_result(choice, computer_choice)
-
-  results(choice, computer_choice)
-
-  # prompt("Do you want to play again?")
-  # answer = gets.chomp
-  # break unless answer.downcase.start_with?('y')
-end
-
-prompt("Thank you for playing.  Good bye!")
+fulfilled_orders =[
+  {customer_id: 12, customer_name: 'Emma Lopez', order_value: 425.48},
+  {customer_id: 32, customer_name: 'Michael Richards', order_value: 120.00},
+  # rest of data
+]

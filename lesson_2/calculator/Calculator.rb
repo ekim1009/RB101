@@ -34,7 +34,7 @@ prompt(MESSAGES['welcome'])
 
 name = ''
 loop do
-  name = gets.chomp
+  name = gets.chomp.capitalize
 
   if name.empty?
     prompt("Make sure to use a valid name.")
@@ -43,7 +43,7 @@ loop do
   end
 end
 
-prompt("Hi #{name}")
+prompt("Hi, #{name}!")
 
 loop do
   number1 = ''

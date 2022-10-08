@@ -29,17 +29,24 @@ def operation_to_message(choice)
   end
 end
 
+def display_winner(player_score, computer_score)
+  if player_score > computer_score
+    prompt(MESSAGES['win'])
+  else
+    prompt(MESSAGES['lost'])
+  end
+end
+
 prompt(MESSAGES['welcome'])
 prompt(MESSAGES['name_of_game'])
 prompt(MESSAGES['rules'])
 puts("\n")
 
-# ask user for name
 name = ''
 loop do
   prompt(MESSAGES['name'])
   name = gets.chomp.strip.capitalize
-  # make sure name is valid, if valid..
+
   if name.empty?
     prompt(MESSAGES['valid_name'])
   else
@@ -47,7 +54,6 @@ loop do
   end
 end
 
-# welcome user
 prompt("Welcome, #{name}")
 puts("\n")
 
@@ -60,9 +66,7 @@ loop do
 
   loop do
     loop do
-      # ask user to pick their choice of -rock -paper -scissor - lizard - spock
-      # allow the user to make choices (r, p, sc, l, sp)
-      choice_prompt = <<-MSG
+      choice_prompt = <<~MSG
         what would you like to play?
         r) rock
         sc) scissor
@@ -74,7 +78,6 @@ loop do
       prompt(choice_prompt)
       user_choice = gets.chomp.strip
 
-      # make sure their input is a valid option
       if VALID_OPTIONS.include?(user_choice)
         break
       else
@@ -83,13 +86,12 @@ loop do
     end
 
     system('clear')
-    # have the computer make a random selection
+
     computer_choice = VALID_OPTIONS.sample
     prompt("You chose: #{operation_to_message(user_choice)}")
     prompt("Computer chose: #{operation_to_message(computer_choice)}")
     puts("\n")
-    # make a program to see which is the winner
-    # winner gets a point per round
+
     if user_choice == computer_choice
       prompt(MESSAGES['tie'])
       puts("\n")
@@ -109,18 +111,13 @@ loop do
     prompt("Computer score is: #{current_computer_score}")
     puts("\n")
 
-    # once user or computer get 3 point, game is over
     break if current_player_score == 3 || current_computer_score == 3
   end
-  # winner is announced
-  system('clear')
-  if player_score > computer_score
-    prompt(MESSAGES['win'])
-  else
-    prompt(MESSAGES['lost'])
-  end
 
-  # would user like to play again?
+  system('clear')
+  
+  display_winner(current_computer_score, current_player_score)
+
   prompt(MESSAGES['play_again'])
   play_again = gets.chomp.strip.downcase
 
@@ -128,5 +125,4 @@ loop do
   system('clear')
 end
 
-# say goodbye
 prompt(MESSAGES['goodbye'])

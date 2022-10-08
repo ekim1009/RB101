@@ -1,0 +1,13 @@
+def tricky_method(a_string_param, an_array_param)
+  a_string_param += "rutabaga"
+  an_array_param << "rutabaga"
+end
+
+my_string = "pumpkins"
+my_array = ["pumpkins"]
+tricky_method(my_string, my_array)
+
+puts "My string looks like this now: #{my_string}"
+# this will output "My string looks like this now: pumpkins" because the += operator is non mutating so "pumpkins""rutabaga" is reassigned a variable and the original string is left untouched
+puts "My array looks like this now: #{my_array}"
+# this will output "My array looks like this now: ["pumpkins","rutabaga"]" becuase the << operator is mutating
