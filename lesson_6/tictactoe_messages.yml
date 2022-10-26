@@ -1,0 +1,15 @@
+welcome: |
+         Welcome to Tic Tac Toe 
+         The rules of Tic Tac Toe are as follows: 
+         You will be the marker 'X' and the computer will be the marker 'O'
+         You will alternate with the computer and mark an empty square
+         The first player to get 3 of their marks in a row
+         (up, down, across, or diagonally) will win that round
+         First player to win five rounds will be the ultimate winner
+         If all 9 squares are full and no player has 3 marks in a row, it is a tie
+first_move: "Would you like to make the first move? (y or n):"
+not_valid: "That is not a valid option"
+plyr_won_rd: "You won this round"
+comp_won_rd: "Computer won this round"
+tie: "This round is a tie"
+play_again: "Thanks for playing Tic Tac Toe.  Good bye!"
