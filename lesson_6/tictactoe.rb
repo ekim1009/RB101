@@ -7,6 +7,7 @@ COMPUTER_MARKER = 'O'
 WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] +
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] +
                 [[1, 5, 9], [3, 5, 7]]
+WINNING_SCORE = 5
 
 def prompt(msg)
   puts "--> #{msg}"
@@ -47,66 +48,6 @@ def empty_square(brd)
   brd.keys.select { |num| brd[num] == INITIAL_MARKER }
 end
 
-def first_move_prompt
-  first = ''
-  loop do
-    prompt (MESSAGES['first_move'])
-    first = gets.chomp.downcase
-    break if first.start_with?('y') || first.start_with?('n')
-    prompt (MESSAGES['not_valid'])
-  end
-  first
-end 
-
-def first_move
-  if first_move_prompt == 'y'
-    true
-  else first_move_prompt == 'n'
-    false
-  end
-end
-
-def alternate_player(current_player)
-  if current_player == PLAYER_MARKER
-    COMPUTER_MARKER
-  else 
-    PLAYER_MARKER
-  end
-end
-
-def place_piece!(brd, current_player)
-  if current_player == PLAYER_MARKER
-    computer_places_piece!(brd)
-  else
-    player_places_piece!(brd)
-  end 
-end
-
-def score_board(brd, player_score, computer_score)
-  prompt "Player score is : #{player_score}"
-  prompt "Computer score is : #{computer_score}"
-end
-
-def round_winner(brd, player_score, computer_score)
-  if detect_winner(brd) == 'Player'
-    prompt (MESSAGES['plyr_won_rd'])
-    player_score += 1
-  elsif detect_winner(brd) == 'Computer'
-    prompt (MESSAGES['comp_won_rd'])
-    computer_score += 1
-  else
-    prompt (MESSAGES['tie'])
-  end
-end
-
-def ultimate_winner(player_score, computer_score)
-  if player_score == 5
-    "Player"
-  else
-    "Computer"
-  end
-end
-
 def joinor(array, delimiter=', ', word='or')
   case array.size
   when 0 then ''
@@ -115,6 +56,36 @@ def joinor(array, delimiter=', ', word='or')
   else
     array[-1] = "#{word} #{array.last}"
     array.join(delimiter)
+  end
+end
+
+def first_move
+  first = ''
+  loop do
+    prompt (MESSAGES['first_move?'])
+    first = gets.chomp.downcase
+    if first == 'f'
+      first = 'Player'
+    elsif first == 'c'
+      first = 'Computer'
+    else first == 'r'
+      first = %w(Player Computer).sample
+    end
+    break if %w(Player Computer).include?(first)
+    prompt (MESSAGES['not_valid'])
+  end
+  first
+end
+
+def alternate_player(current_player)
+  current_player == 'Player' ? 'Computer' : 'Player'
+end
+
+def place_piece!(brd, current_player)
+  if current_player == 'Player'
+    player_places_piece!(brd)
+  else
+    computer_places_piece!(brd)
   end
 end
 
@@ -132,35 +103,35 @@ end
 
 def find_at_risk_square(line, brd, marker)
   if brd.values_at(*line).count(marker) == 2
-    brd.select {|k, v| line.include?(k) && v == INITIAL_MARKER}.keys.first
-  else
-    nil
+    brd.select { |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
   end
+  nil
 end
 
 def computer_places_piece!(brd)
   square = nil
-    
+
   if !square
     WINNING_LINES.each do |line|
       square = find_at_risk_square(line, brd, COMPUTER_MARKER)
       break if square
-    end 
+    end
   end
-    
+  
   WINNING_LINES.each do |line|
     square = find_at_risk_square(line, brd, PLAYER_MARKER)
     break if square
   end
-    
-  if empty_square(brd) == brd[5]
-    square = COMPUTER_MARKER
-  end
+
+  # if !square
+  #   square = empty_square(brd) == INITIAL_MARKER
+  #   brd[square] = COMPUTER_MARKER
+  # end
 
   if !square
     square = empty_square(brd).sample
   end
-     
+
   brd[square] = COMPUTER_MARKER
 end
 
@@ -183,41 +154,76 @@ def detect_winner(brd)
   nil
 end
 
-  
+def round_winner(brd)
+  if detect_winner(brd) == 'Player'
+    prompt (MESSAGES['plyr_won_rd'])
+  elsif detect_winner(brd) == 'Computer'
+    prompt (MESSAGES['comp_won_rd'])
+  else board_full?(brd)
+    prompt (MESSAGES['tie'])
+  end
+end
+
+def current_score(brd, scores)
+  if detect_winner(brd) == 'Player'
+    scores[:player] += 1
+  elsif detect_winner(brd) == 'Computer'
+    scores[:computer] += 1
+  else
+    scores[:ties] += 1
+  end
+end
+
+def scoreboard(scores)
+  prompt "Your score is: #{scores[:player]}"
+  prompt "Computer score is: #{scores[:computer]}"
+  prompt "Ties: #{scores[:ties]}"
+end
+
+# def ultimate_winner(scores)
+#   if scores[:player] > scores[:computer]
+#     prompt (MESSAGES['plyr_won_game'])
+#   else
+#     prompt (MESSAGES['comp_won_game'])
+#   end
+# end
+
+def play_again?
+  answer = ''
+  loop do
+    prompt (MESSAGES['play_again?'])
+    answer = gets.chomp.downcase
+    break if answer.start_with?('y')
+  end
+  answer
+end
+
+rules
 loop do
-  rules
-  player_score = 0
-  computer_score = 0
-  first_player = first_move ? 'Player' : 'Computer'
-  current_player = first_player
-  
+  board = initialize_board
+  scores = { player: 0, computer: 0, ties: 0 }
+  current_player = first_move
+
   loop do
     board = initialize_board
     display_board(board)
-    
+
     loop do
       display_board(board)
-      score_board(board, player_score, computer_score)
+      scoreboard(scores)
       place_piece!(board, current_player)
       current_player = alternate_player(current_player)
       break if someone_won?(board) || board_full?(board)
     end
-    
-    round_winner(board, player_score, computer_score)
-    break if player_score == 5 || computer_score == 5
+
+    current_score(board, scores)
+    break if scores[:player] == WINNING_SCORE ||
+             scores[:computer] == WINNING_SCORE
   end
-  
-  prompt "#{ultimate_winner(player_score, computer_score)}"
-    
-  prompt "Play again? (y or n)"
-  answer = gets.chomp
-  break unless answer.downcase.start_with?('y')
+
+  ultimate_winner(scores)
+  play_again?
+  break unless play_again?.start_with?('y')
 end
 
-prompt (MESSAGES['play_again'])
-
-
-# https://stackoverflow.com/questions/1543171/how-can-i-output-leading-zeros-in-ruby
-# https://www.geeksforgeeks.org/recursion-in-ruby/
-# https://realpython.com/python-minimax-nim/
-# https://www.youtube.com/watch?v=trKjYdBASyQ
+prompt (MESSAGES['good_bye'])
