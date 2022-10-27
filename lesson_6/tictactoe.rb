@@ -108,6 +108,12 @@ def find_at_risk_square(line, brd, marker)
   nil
 end
 
+def five_empty?(brd)
+  if brd[5] == INITIAL_MARKER
+     brd[5] = COMPUTER_MARKER
+  end
+end
+
 def computer_places_piece!(brd)
   square = nil
 
@@ -123,12 +129,8 @@ def computer_places_piece!(brd)
     break if square
   end
 
-  # if !square
-  #   square = empty_square(brd) == INITIAL_MARKER
-  #   brd[square] = COMPUTER_MARKER
-  # end
-
-  if !square
+  if five_empty?(brd)
+  elsif !square
     square = empty_square(brd).sample
   end
 
