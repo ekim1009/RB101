@@ -1,3 +1,4 @@
+require 'pry'
 require 'yaml'
 MESSAGES = YAML.load_file('tictactoe_messages.yml')
 
@@ -14,7 +15,7 @@ def prompt(msg)
 end
 
 def rules
-  prompt (MESSAGES['welcome'])
+  prompt(MESSAGES['welcome'])
 end
 
 # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -62,17 +63,16 @@ end
 def first_move
   first = ''
   loop do
-    prompt (MESSAGES['first_move?'])
+    prompt(MESSAGES['first_move?'])
     first = gets.chomp.downcase
     if first == 'f'
       first = 'Player'
     elsif first == 'c'
       first = 'Computer'
-    else first == 'r'
-      first = %w(Player Computer).sample
+    else
+      prompt(MESSAGES['not_valid'])
     end
     break if %w(Player Computer).include?(first)
-    prompt (MESSAGES['not_valid'])
   end
   first
 end
@@ -95,7 +95,7 @@ def player_places_piece!(brd)
     prompt "Choose a position to place a piece: #{joinor(empty_square(brd))}"
     square = gets.chomp.to_i
     break if empty_square(brd).include?(square)
-    prompt (MESSAGES['not_valid'])
+    prompt(MESSAGES['not_valid'])
   end
 
   brd[square] = PLAYER_MARKER
@@ -110,32 +110,37 @@ end
 
 def five_empty?(brd)
   if brd[5] == INITIAL_MARKER
-     brd[5] = COMPUTER_MARKER
+    brd[5] = COMPUTER_MARKER
   end
 end
 
+# rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
 def computer_places_piece!(brd)
   square = nil
 
-  if !square
-    WINNING_LINES.each do |line|
-      square = find_at_risk_square(line, brd, COMPUTER_MARKER)
-      break if square
-    end
-  end
-  
   WINNING_LINES.each do |line|
-    square = find_at_risk_square(line, brd, PLAYER_MARKER)
+    square = find_at_risk_square(line, brd, COMPUTER_MARKER)
     break if square
   end
 
-  if five_empty?(brd)
-  elsif !square
+  if !square
+    WINNING_LINES.each do |line|
+      square = find_at_risk_square(line, brd, PLAYER_MARKER)
+      break if square
+    end
+  end
+
+  if !square
+    square = five_empty?(brd)
+  end
+
+  if !square
     square = empty_square(brd).sample
   end
 
   brd[square] = COMPUTER_MARKER
 end
+# rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
 
 def board_full?(brd)
   empty_square(brd).empty?
@@ -158,11 +163,11 @@ end
 
 def round_winner(brd)
   if detect_winner(brd) == 'Player'
-    prompt (MESSAGES['plyr_won_rd'])
+    prompt(MESSAGES['plyr_won_rd'])
   elsif detect_winner(brd) == 'Computer'
-    prompt (MESSAGES['comp_won_rd'])
-  else board_full?(brd)
-    prompt (MESSAGES['tie'])
+    prompt(MESSAGES['comp_won_rd'])
+  elsif board_full?(brd)
+    prompt(MESSAGES['tie'])
   end
 end
 
@@ -182,20 +187,21 @@ def scoreboard(scores)
   prompt "Ties: #{scores[:ties]}"
 end
 
-# def ultimate_winner(scores)
-#   if scores[:player] > scores[:computer]
-#     prompt (MESSAGES['plyr_won_game'])
-#   else
-#     prompt (MESSAGES['comp_won_game'])
-#   end
-# end
+def ultimate_winner(scores)
+  if scores[:player] > scores[:computer]
+    prompt(MESSAGES['plyr_won_game'])
+  else
+    prompt(MESSAGES['comp_won_game'])
+  end
+end
 
 def play_again?
-  answer = ''
+  answer = nil
   loop do
-    prompt (MESSAGES['play_again?'])
+    prompt(MESSAGES['play_again?'])
     answer = gets.chomp.downcase
-    break if answer.start_with?('y')
+    break if %w(y n).include?(answer)
+    prompt(MESSAGES['not_valid'])
   end
   answer
 end
@@ -224,8 +230,7 @@ loop do
   end
 
   ultimate_winner(scores)
-  play_again?
   break unless play_again?.start_with?('y')
 end
 
-prompt (MESSAGES['good_bye'])
+prompt(MESSAGES['good_bye'])

@@ -7,12 +7,12 @@ welcome: |
          (up, down, across, or diagonally) will win that round
          First player to win five rounds will be the ultimate winner
          If all 9 squares are full and no player has 3 marks in a row, it is a tie
-first_move?: "Would you like to make the first move (f), have the computer go first (c), or random (r)?"
+first_move?: "Would you like to make the first move (f) or have the computer go first (c)?"
 not_valid: "That is not a valid option"
 plyr_won_rd: "You won this round"
 comp_won_rd: "Computer won this round"
 tie: "This round is a tie"
 plyr_won_game: "Congratulations! You are the ultimate winner!"
 comp_won_game: "Computer is the ultimate winner! Better luck next time!"
-play_again: "Would you like to play again? (y or n)"
+play_again?: "Would you like to play again? (y or n)"
 good_bye: "Thanks for playing Tic Tac Toe.  Good bye!"
