@@ -1,4 +1,3 @@
-require 'pry'
 require 'yaml'
 MESSAGES = YAML.load_file('tictactoe_messages.yml')
 
@@ -101,46 +100,76 @@ def player_places_piece!(brd)
   brd[square] = PLAYER_MARKER
 end
 
-def find_at_risk_square(line, brd, marker)
-  if brd.values_at(*line).count(marker) == 2
+def computer_offense(brd, line)
+  if brd.values_at(*line).count(COMPUTER_MARKER) == 2
     brd.select { |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
-  end
-  nil
-end
-
-def five_empty?(brd)
-  if brd[5] == INITIAL_MARKER
-    brd[5] = COMPUTER_MARKER
+  else
+    nil
   end
 end
 
-# rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
-def computer_places_piece!(brd)
+def comp_offense_move(brd)
   square = nil
-
-  WINNING_LINES.each do |line|
-    square = find_at_risk_square(line, brd, COMPUTER_MARKER)
-    break if square
-  end
-
   if !square
     WINNING_LINES.each do |line|
-      square = find_at_risk_square(line, brd, PLAYER_MARKER)
+      square = computer_offense(brd, line)
+      break if square
+    end
+  end 
+  square
+end
+  
+def computer_defense(brd, line)
+  if brd.values_at(*line).count(PLAYER_MARKER) == 2
+    brd.select { |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
+  else
+    nil
+  end
+end
+
+def comp_defense_move(brd)
+  square = nil
+  if !square
+    WINNING_LINES.each do |line|
+      square = computer_defense(brd, line)
       break if square
     end
   end
+  square
+end
 
+def five_empty?(brd)
+  square = nil
+  if brd[5] == INITIAL_MARKER
+    square = 5
+  end
+  square
+end
+
+def pick_square_five(brd)
+  square = nil
   if !square
     square = five_empty?(brd)
   end
+  square
+end
 
+def pick_random_square(brd)
+  square = nil
   if !square
     square = empty_square(brd).sample
   end
+  square
+end
 
+def computer_places_piece!(brd)
+  square = nil
+  square = comp_offense_move(brd)
+  square = comp_defense_move(brd) if !square
+  square = pick_square_five(brd) if five_empty?(brd)
+  square = pick_random_square(brd) if !square
   brd[square] = COMPUTER_MARKER
 end
-# rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
 
 def board_full?(brd)
   empty_square(brd).empty?
@@ -200,7 +229,7 @@ def play_again?
   loop do
     prompt(MESSAGES['play_again?'])
     answer = gets.chomp.downcase
-    break if %w(y n).include?(answer)
+    break if %w(y n yes no).include?(answer)
     prompt(MESSAGES['not_valid'])
   end
   answer
