@@ -115,10 +115,10 @@ def comp_offense_move(brd)
       square = computer_offense(brd, line)
       break if square
     end
-  end 
+  end
   square
 end
-  
+
 def computer_defense(brd, line)
   if brd.values_at(*line).count(PLAYER_MARKER) == 2
     brd.select { |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
@@ -163,7 +163,6 @@ def pick_random_square(brd)
 end
 
 def computer_places_piece!(brd)
-  square = nil
   square = comp_offense_move(brd)
   square = comp_defense_move(brd) if !square
   square = pick_square_five(brd) if five_empty?(brd)
