@@ -101,11 +101,12 @@ def player_places_piece!(brd)
 end
 
 def computer_offense(brd, line)
+  square = nil
   if brd.values_at(*line).count(COMPUTER_MARKER) == 2
-    brd.select { |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
-  else
-    nil
+    square = brd.select { |k, v| line.include?(k) && v == INITIAL_MARKER }
+                .keys.first
   end
+  square
 end
 
 def comp_offense_move(brd)
@@ -120,11 +121,12 @@ def comp_offense_move(brd)
 end
 
 def computer_defense(brd, line)
+  square = nil
   if brd.values_at(*line).count(PLAYER_MARKER) == 2
-    brd.select { |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
-  else
-    nil
+    square = brd.select { |k, v| line.include?(k) && v == INITIAL_MARKER }
+                .keys.first
   end
+  square
 end
 
 def comp_defense_move(brd)
