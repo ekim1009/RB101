@@ -1,16 +1,12 @@
-require 'pry'
 require 'yaml'
+MESSAGES = YAML.load_file('twentyone_messages.yml')
 
 def prompt(msg)
   puts "--> #{msg}"
 end
 
 def welcome
-  prompt "Welcome to twenty one"
-  puts "============"
-  prompt "The player with a total of 21 or the closest to it wins"
-  prompt "First to win 5 rounds is the winner!"
-  puts "============"
+ prompt(MESSAGES['welcome'])
 end
 
 CARDS = %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
@@ -108,18 +104,18 @@ end
 
 def dealer_turn
   system 'clear'
-  prompt "It's the dealers turn"
+  prompt(MESSAGES["dealer_turn"])
   sleep 1
 end
 
 def dealer_hit_or_stay(deal_cards, deck)
   loop do
     if calculate_cards(deal_cards) < DEALER_HITS_UNTIL
-      prompt "Dealer hits.."
+      prompt(MESSAGES["dealer_hit"])
       sleep 0.5
       deal_cards << deal_one_card(deck)
     else
-      prompt "Dealer chose to stay.."
+      prompt(MESSAGES["dealer_stay"])
       sleep 0.5
     end
     break if calculate_cards(deal_cards) >= DEALER_HITS_UNTIL
@@ -133,25 +129,25 @@ def declare_winner(plyr_crds, deal_crds, scores)
   dealers_total = calculate_cards(deal_crds)
 
   if players_total > TOTAL_TO_WIN
-    prompt "You busted! Dealer wins! \n\n"
+    prompt(MESSAGES["player_bust"])
     scores[:dealer] += 1
   elsif dealers_total > TOTAL_TO_WIN
-    prompt "Dealer busted! You win! \n\n"
+    prompt(MESSAGES["dealer_bust"])
     scores[:player] += 1
   elsif players_total == TOTAL_TO_WIN
-    prompt "Your cards total 21! You win! \n\n"
+    prompt(MESSAGES["player_21"])
     scores[:player] += 1
   elsif dealers_total == TOTAL_TO_WIN
-    prompt "Dealers cards total 21! Dealer wins! \n\n"
+    prompt(MESSAGES["dealer_21"])
     scores[:dealer] += 1
   elsif players_total > dealers_total
-    prompt "You win! \n\n"
+    prompt(MESSAGES["player_won_round"])
     scores[:player] += 1
   elsif dealers_total > players_total
-    prompt "Dealer wins! \n\n"
+    prompt(MESSAGES["dealer_won_round"])
     scores[:dealer] += 1
   else
-    prompt "It's a tie! \n\n"
+    prompt(MESSAGES["tie"])
   end
 end
 # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
@@ -163,34 +159,34 @@ end
 
 def ultimate_winner(scores)
   if scores[:player] == TOTAL_GAMES_TO_WIN
-    prompt "Congratulations! You have won 5 rounds!"
+    prompt(MESSAGES["player_won"])
   else
-    prompt "Dealer has won 5 rounds! Better luck next time!"
+    prompt(MESSAGES["dealer_won"])
   end
 end
 
 def play_again?
   answer = nil
   loop do
-    prompt("Would you like to play again? (y or n)")
+    prompt(MESSAGES["play_again?"])
     answer = gets.chomp.downcase
     break if %w(y n yes no).include?(answer)
-    prompt("That is not a valid option")
+    prompt(MESSAGES["invalid"])
   end
   system 'clear'
   answer
 end
 
 def goodbye
-  prompt("Thanks for playing!  Goodbye!")
+  prompt(MESSAGES['goodbye'])
 end
 
 answer = ''
 scores = { player: 0, dealer: 0 }
-
+welcome
 loop do
-  welcome
-  scores = { player: 0, dealer: 0 }
+scores = { player: 0, dealer: 0 }
+
   loop do
     deck = initialize_deck
     players_cards = []
@@ -203,25 +199,25 @@ loop do
       scoreboard(scores)
 
       loop do
-        prompt("Would you like to 'hit' or 'stay'")
+        prompt(MESSAGES["hit_or_stay"])
         answer = gets.chomp.downcase
-        break if %w(hit stay).include?(answer)
-        prompt("That was an invalid choice")
+        break if %w(h s hit stay).include?(answer)
+        prompt(MESSAGES['invalid'])
       end
 
-      if answer == 'hit'
-        prompt "You chose to hit!"
+      if %w(h hit).include?(answer)
+        prompt(MESSAGES["hit"])
         players_cards << deal_one_card(deck)
         system 'clear'
         prompt "Dealer has: #{joinof(dealers_cards[0])} and an unknown card\n" \
               "Your cards are now: #{show_players_cards(players_cards)}" \
               "for a total of: #{calculate_cards(players_cards)}"
       else
-        prompt "You chose to stay!"
-        prompt "Your cards are now: #{show_players_cards(players_cards)}" \
-              "for a total of: #{calculate_cards(players_cards)}"
+        prompt(MESSAGES["stay"])
+        prompt "You stayed at a total of: #{calculate_cards(players_cards)}"
+        sleep 1
       end
-      break if %w(stay).include?(answer) || bust?(players_cards)
+      break if %w(s stay).include?(answer) || bust?(players_cards)
     end
 
     dealer_turn
