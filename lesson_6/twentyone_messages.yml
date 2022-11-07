@@ -1,0 +1,26 @@
+welcome : |
+          Welcome to twenty one
+          ============
+          The player with a total of 21 or the closest to it wins
+          First to win 5 rounds is the winner!
+          ============
+invalid: "That is not a valid option"
+hit_or_stay: "Would you like to 'hit' or 'stay'"
+hit: "You chose to hit!"
+stay: "You chose to stay!"
+dealer_turn: "It's the dealers turn"
+dealer_hit: "Dealer hits.."
+dealer_stay: "Dealer chose to stay.."
+player_bust: "You busted! Dealer wins! \n\n"
+dealer_bust: "Dealer busted! You win! \n\n"
+player_21: "Your cards total 21! You win! \n\n"
+dealer_21: "Dealers cards total 21! Dealer wins! \n\n"
+player_won_round: "You won this round! \n\n"
+dealer_won_round: "Dealer won this round! \n\n"
+tie: "It's a tie! \n\n"
+player_won: "Congratulations! You have won 5 rounds!"
+dealer_won: "Dealer has won 5 rounds! Better luck next time!"
+play_again?: "Would you like to play again? (y or n)"
+goodbye : |
+
+          Thanks for playing!  Goodbye!
