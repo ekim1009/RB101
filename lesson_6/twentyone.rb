@@ -6,7 +6,7 @@ def prompt(msg)
 end
 
 def welcome
- prompt(MESSAGES['welcome'])
+  prompt(MESSAGES['welcome'])
 end
 
 CARDS = %w(2 3 4 5 6 7 8 9 10 jack queen king ace)
@@ -87,12 +87,12 @@ def calculate_cards(cards)
   total = 0
   values.each do |value|
     total += if value == "ace"
-      11
-    elsif value.to_i == 0
-      10
-    else
-      value.to_i
-    end
+               11
+             elsif value.to_i == 0
+               10
+             else
+               value.to_i
+             end
   end
 
   values.select { |value| value == "ace" }.count.times do
@@ -185,7 +185,7 @@ answer = ''
 scores = { player: 0, dealer: 0 }
 welcome
 loop do
-scores = { player: 0, dealer: 0 }
+  scores = { player: 0, dealer: 0 }
 
   loop do
     deck = initialize_deck
