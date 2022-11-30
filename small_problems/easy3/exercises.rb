@@ -108,19 +108,24 @@ write method that returns an array that containes every other element of an arra
 =end
 
 # def oddities(array)
-#   new_array = []
+#   odd_array = []
+#   if array.empty?
+#     array
+#   end 
   
-#   array.each_index do |ele, idx|
-#     new_array << ele
+#   array.select.with_index do |ele, idx|
+#     if idx % 2 == 0
+#       odd_array << ele
+#     end
 #   end
-#   new_array
+#   odd_array
 # end
 
-# puts oddities([2, 3, 4, 5, 6]) == [2, 4, 6]
-# oddities([1, 2, 3, 4, 5, 6]) == [1, 3, 5]
-# oddities(['abc', 'def']) == ['abc']
-# oddities([123]) == [123]
-# oddities([]) == []
+# p oddities([2, 3, 4, 5, 6]) == [2, 4, 6]
+# p oddities([1, 2, 3, 4, 5, 6]) == [1, 3, 5]
+# p oddities(['abc', 'def']) == ['abc']
+# p oddities([123]) == [123]
+# p oddities([]) == []
 
 =begin #8
 palindromic strings(part 1)
@@ -146,20 +151,45 @@ if there are no more index's, break
 code with intent
 =end
 
-def palindrome(string)
-    
-  if string.length == 1
-    true
-  end
-  
-  string.each do |char|
-    if char[0] =
-  end
-end
+# def palindrome?(string)
+#   string == string.reverse  
+# end
+
+# p palindrome?('madam') == true
+# p palindrome?('Madam') == false          # (case matters)
+# p palindrome?("madam i'm adam") == false # (all characters matter)
+# p palindrome?('356653') == true
+
 =begin #9
 palindromic strings (part 2)
+write a method that takes a string
+returns true if string passed as argument is a palindrome, otherwise false
+case and spacing do not matter
 =end
+
+# def real_palindrome?(string)
+#   new_str = string.downcase.delete('^a-z0-9')
+#   palindrome?(new_str)
+# end
+
+# p real_palindrome?('madam') == true
+# p real_palindrome?('Madam') == true           # (case does not matter)
+# p real_palindrome?("Madam, I'm Adam") == true # (only alphanumerics matter)
+# p real_palindrome?('356653') == true
+# p real_palindrome?('356a653') == true
+# p real_palindrome?('123ab321') == false
 
 =begin #10
 palindromic numbers
+write a method that takes an integer
+return true if integer reads the same forwards and backwards
 =end
+
+# def palindromic_number?(integer)
+#   integer.to_s == integer.to_s.reverse
+# end 
+
+# p palindromic_number?(34543) == true
+# p palindromic_number?(123210) == false
+# p palindromic_number?(22) == true
+# p palindromic_number?(5) == true
