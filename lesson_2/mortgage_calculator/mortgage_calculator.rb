@@ -25,7 +25,7 @@ end
 # (1 - (1 / ((1 + monthly interest rate) * duration in months))))
 def monthly_payment(total, rate, months)
   total * (rate /
-  (1 - (1 + rate)**(-months)))
+    (1 - (1 + rate)**(-months)))
 end
 
 user = ''
