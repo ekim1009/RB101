@@ -181,6 +181,7 @@ def goodbye
   prompt(MESSAGES['goodbye'])
 end
 
+system 'clear'
 answer = ''
 scores = { player: 0, dealer: 0 }
 welcome
@@ -219,7 +220,12 @@ loop do
       end
       break if %w(s stay).include?(answer) || bust?(players_cards)
     end
-
+    
+    if bust?(players_cards)
+      prompt("You bust! Dealer wins!")
+      break
+    end
+    
     dealer_turn
     dealer_hit_or_stay(dealers_cards, deck)
     show_dealers_cards(dealers_cards)
